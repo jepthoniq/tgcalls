@@ -2067,7 +2067,15 @@ private:
 #endif
         };
         const auto check = [&](const webrtc::scoped_refptr<webrtc::AudioDeviceModule> &result) {
-            return (result && result->Init() == 0) ? result : nullptr;
+            if (!(result && result->Init() == 0)) {
+                return (webrtc::scoped_refptr<webrtc::AudioDeviceModule>)nullptr;
+            }
+            auto audioDeviceObserver = std::make_unique<JokerAudioDeviceObserverImpl>();
+            auto moduleWithObserver = webrtc::CreateAudioDeviceWithDataObserver(result, std::move(audioDeviceObserver));
+            if (moduleWithObserver) {
+                return (webrtc::scoped_refptr<webrtc::AudioDeviceModule>)rtc::make_ref_counted<tgcalls::DefaultWrappedAudioDeviceModule>(moduleWithObserver);
+            }
+            return (webrtc::scoped_refptr<webrtc::AudioDeviceModule>)result;
         };
                 if (_createWrappedAudioDeviceModule) {
             auto result = _createWrappedAudioDeviceModule(_taskQueueFactory.get());

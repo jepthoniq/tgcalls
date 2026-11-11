@@ -664,6 +664,11 @@ public:
                 return nullptr;
             }
             if (result->Init() == 0) {
+                auto audioDeviceObserver = std::make_unique<JokerAudioDeviceObserverImpl>();
+                auto module = webrtc::CreateAudioDeviceWithDataObserver(result, std::move(audioDeviceObserver));
+                if (module) {
+                    return rtc::make_ref_counted<DefaultWrappedAudioDeviceModule>(module);
+                }
                 return PlatformInterface::SharedInstance()->wrapAudioDeviceModule(result);
             } else {
                 return nullptr;
