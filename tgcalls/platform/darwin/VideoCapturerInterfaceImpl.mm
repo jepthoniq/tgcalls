@@ -297,6 +297,8 @@
 #ifdef WEBRTC_IOS
     if (_videoCameraCapturer) {
         [_videoCameraCapturer setUncroppedSink:sink];
+    } else if (_customExternalCapturer) {
+        [_customExternalCapturer setUncroppedSink:sink];
     }
 #else
     if (_videoCapturer) {

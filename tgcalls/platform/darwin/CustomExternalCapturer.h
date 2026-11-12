@@ -17,6 +17,10 @@
 
 + (void)passPixelBuffer:(CVPixelBufferRef)pixelBuffer sampleBufferReference:(CMSampleBufferRef)sampleBufferReference rotation:(RTCVideoRotation)rotation toSource:(webrtc::scoped_refptr<webrtc::VideoTrackSourceInterface>)source croppingBuffer:(std::vector<uint8_t> &)croppingBuffer;
 
+// Joker: attach the call's local outgoing view sink, like the camera capturer does.
+// The external capturer forwards its raw frames to this sink; without it the local tile never receives a frame.
+- (void)setUncroppedSink:(std::shared_ptr<rtc::VideoSinkInterface<webrtc::VideoFrame>>)sink;
+
 @end
 #endif // WEBRTC_IOS
 #endif
