@@ -117,7 +117,8 @@ static tgcalls::DarwinVideoTrackSource *getObjCVideoSource(const webrtc::scoped_
     }
     if (sink) {
         RTCVideoFrame *localFrame = [[RTCVideoFrame alloc] initWithBuffer:rtcPixelBuffer rotation:rotation timeStampNs:timeStampNs];
-        webrtc::scoped_refptr<webrtc::VideoFrameBuffer> buffer = new rtc::RefCountedObject<webrtc::ObjCFrameBuffer>(localFrame.buffer);
+        webrtc::scoped_refptr<webrtc::VideoFrameBuffer> buffer;
+        buffer = new rtc::RefCountedObject<webrtc::ObjCFrameBuffer>(localFrame.buffer);
         webrtc::VideoRotation localRotation = static_cast<webrtc::VideoRotation>(rotation);
         sink->OnFrame(webrtc::VideoFrame::Builder()
                 .set_video_frame_buffer(buffer)
